@@ -9,7 +9,7 @@ storr_rds_s3(bucket, path, compress = NULL, mangle_key = NULL,
   default_namespace = "objects")
 }
 \arguments{
-\item{bucket}{Name of the S3 bucket for which you wish to create of connect
+\item{bucket}{Name of the S3 bucket for which you wish to create or connect
 store}
 
 \item{path}{Path for the store.  \code{tempdir()} is a good choice
