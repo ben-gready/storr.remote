@@ -34,10 +34,10 @@ R6_driver_rds_s3 <- R6::R6Class(
                           hash_algorithm) {
 
       is_new <- !s3_object_exists(bucket = bucket, path = file.path(path, "config"))
-      aws.s3::put_folder(folder = path, bucket = bucket)
-      aws.s3::put_folder(folder = file.path(path, "data"), bucket = bucket)
-      aws.s3::put_folder(folder = file.path(path, "keys"), bucket = bucket)
-      aws.s3::put_folder(folder = file.path(path, "config"), bucket = bucket)
+      s3_create_dir(path = path, bucket = bucket)
+      s3_create_dir(path = file.path(path, "data"), bucket = bucket)
+      s3_create_dir(path = file.path(path, "keys"), bucket = bucket)
+      s3_create_dir(path = file.path(path, "config"), bucket = bucket)
       self$bucket <- bucket
       self$path <- path
 
@@ -96,7 +96,7 @@ R6_driver_rds_s3 <- R6::R6Class(
     },
 
     set_hash = function(key, namespace, hash) {
-      aws.s3::put_folder(folder = self$name_key("", namespace), bucket = self$bucket)
+      s3_create_dir(path = self$name_key("", namespace), bucket = self$bucket)
       s3_writeLines(text = hash, path = self$name_key(key, namespace), bucket = self$bucket)
       #*** should be making use of (or making an equivalent version of) the
       #write_lines function within the storr package here (I think it deletes
@@ -111,7 +111,11 @@ R6_driver_rds_s3 <- R6::R6Class(
       ## NOTE: this takes advantage of having the serialized value
       ## already and avoids seralising twice.
       storr:::assert_raw(value)
-      aws.s3::s3write_using(x = value, FUN = function(v, p) storr:::write_serialized_rds(v, p, self$compress), object = self$name_hash(hash), bucket = self$bucket)
+
+      s3_write_serialized_rds(value = value,
+                              filename = self$name_hash(hash),
+                              bucket = self$bucket,
+                              compress = self$compress)
     },
 
     exists_hash = function(key, namespace) {
@@ -219,6 +223,20 @@ s3_write_if_missing <- function(value, bucket, path) {
 }
 
 ## S3 Helper functions
+##
+##
+
+s3_write_serialized_rds <- function(value, filename, bucket, compress) {
+  # write_serialized_rds(value, self$name_hash(hash), self$compress)
+  aws.s3::s3write_using(x = value,
+                        FUN = function(v, f) storr:::write_serialized_rds(value = v, filename = f, compress=compress),
+                        object = filename,
+                        bucket = bucket)
+}
+
+s3_create_dir <- function(path, bucket) {
+  aws.s3::put_folder(folder = path, bucket = bucket)
+}
 
 s3_file_remove <- function(path, bucket) {
 
