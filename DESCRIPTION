@@ -1,0 +1,15 @@
+Package: storr.remote
+Title: remote backends for storr
+Version: 0.0.0.9000
+Authors@R: person("Ben", "Gready", email = "bpgready@pm.me", role = c("aut", "cre"))
+Description: This package provides remote back ends to the wonderful storr 
+    key/val package. Right now AWS S3 is implemented, but we hope it will be 
+    easy for others to contribute other backends.
+Depends: R (>= 3.4.3)
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Suggests:
+    aws.s3,
+    storr
+RoxygenNote: 6.0.1
