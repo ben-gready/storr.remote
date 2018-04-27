@@ -5,7 +5,7 @@ Authors@R: person("Ben", "Gready", email = "bpgready@pm.me", role = c("aut", "cr
 Description: This package provides remote back ends to the wonderful storr 
     key/val package. Right now AWS S3 is implemented, but we hope it will be 
     easy for others to contribute other backends.
-Depends: R (>= 3.4.3)
+Depends: R (>= 3.1.0)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
