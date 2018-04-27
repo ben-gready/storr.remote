@@ -1,5 +1,5 @@
 ##' @title S3 backend for rds object cache driver
-##' @param bucket Name of the S3 bucket for which you wish to create of connect
+##' @param bucket Name of the S3 bucket for which you wish to create or connect
 ##' store
 ##' @inheritParams storr::storr_rds
 storr_rds_s3 <- function(bucket, path, compress = NULL, mangle_key = NULL,
@@ -238,14 +238,6 @@ s3_create_dir <- function(path, bucket) {
   aws.s3::put_folder(folder = path, bucket = bucket)
 }
 
-s3_file_remove <- function(path, bucket) {
-
-  exists <- s3_object_exists(bucket, path)
-  if (any(exists)) {
-    objec(path[exists])
-  }
-  invisible(exists)
-}
 
 s3_writeLines <- function(text, path, bucket) {
   aws.s3::s3write_using(x = text, FUN = writeLines, object = path, bucket = bucket)

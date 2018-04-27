@@ -13,7 +13,7 @@ driver_rds_s3(bucket, path, compress = NULL, mangle_key = NULL,
   mangle_key_pad = NULL, hash_algorithm = NULL)
 }
 \arguments{
-\item{bucket}{Name of the S3 bucket for which you wish to create of connect
+\item{bucket}{Name of the S3 bucket for which you wish to create or connect
 store}
 
 \item{path}{Path for the store.  \code{tempdir()} is a good choice
