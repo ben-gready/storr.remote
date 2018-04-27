@@ -85,7 +85,7 @@ R6_driver_rds_remote <- R6::R6Class(
     },
 
     get_object = function(hash) {
-      aws.s3::s3readRDS(object = self$name_hash(hash))
+      self$file_ops$readObject(path = self$name_hash(hash))
     },
 
     set_object = function(hash, value) {

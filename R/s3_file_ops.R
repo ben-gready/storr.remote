@@ -29,8 +29,8 @@ R6_s3_file_ops <- R6::R6Class(
                             bucket = self$bucket)
     },
 
-    create_dir = function(path) {
-      aws.s3::put_folder(folder = path, bucket = self$bucket)
+    readObject = function(path){
+      aws.s3::s3readRDS(object = path, bucket = self$bucket)
     },
 
     writeLines = function(text, path) {
@@ -39,6 +39,10 @@ R6_s3_file_ops <- R6::R6Class(
 
     readLines = function(path) {
       aws.s3::s3read_using(FUN = readLines, object = path, bucket = self$bucket)
+    },
+
+    create_dir = function(path) {
+      aws.s3::put_folder(folder = path, bucket = self$bucket)
     },
 
     object_exists = function(path) {
