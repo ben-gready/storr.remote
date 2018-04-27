@@ -1,12 +1,12 @@
 ##' @title S3 file op equivalents
 ##' @param bucket Name of the S3 bucket for which you wish to create or connect
 ##' store
+##' @export
+##' @rdname s3_file_ops
 s3_file_ops <- function(bucket){
   R6_s3_file_ops$new(bucket)
 }
 
-##' @export
-##' @rdname s3_file_ops
 R6_s3_file_ops <- R6::R6Class(
   "s3_file_ops",
   public = list(
