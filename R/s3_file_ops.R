@@ -49,6 +49,7 @@ R6_s3_file_ops <- R6::R6Class(
 
     list_dir = function(path) {
 
+      if(substr(path, nchar(path), nchar(path)) != "/") path = paste0(path, "/")
       files_table <- aws.s3::get_bucket_df(bucket = self$bucket, prefix = path, max = Inf)
       keys <- files_table[files_table$Size > 0,]$Key
       files <- gsub(pattern = path, replacement = "", x = keys)
