@@ -14,6 +14,5 @@ storr_rds_s3 <- function(bucket, path, compress = NULL, mangle_key = NULL,
 
 driver_rds_s3 <- function(bucket, path, compress = NULL, mangle_key = NULL,
                           mangle_key_pad = NULL, hash_algorithm = NULL) {
-
   R6_driver_rds_remote$new(s3_file_ops(bucket), path, compress, mangle_key, mangle_key_pad, hash_algorithm)
 }
