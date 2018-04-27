@@ -260,7 +260,8 @@ s3_object_exists <- function(bucket, path) {
 }
 
 s3_list_dir <- function(bucket, path) {
-
+  
+  if(substr(path, nchar(path), nchar(path)) != "/") path = paste0(path, "/")
   files_table <- aws.s3::get_bucket_df(bucket = bucket, prefix = path, max = Inf)
   keys <- files_table[files_table$Size > 0,]$Key
   files <- gsub(pattern = path, replacement = "", x = keys)
