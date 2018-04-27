@@ -2,15 +2,11 @@
 % Please edit documentation in R/driver_rds_s3.R
 \name{storr_rds_s3}
 \alias{storr_rds_s3}
-\alias{driver_rds_s3}
 \title{S3 backend for rds object cache driver}
 \usage{
 storr_rds_s3(bucket, path, compress = NULL, mangle_key = NULL,
   mangle_key_pad = NULL, hash_algorithm = NULL,
   default_namespace = "objects")
-
-driver_rds_s3(bucket, path, compress = NULL, mangle_key = NULL,
-  mangle_key_pad = NULL, hash_algorithm = NULL)
 }
 \arguments{
 \item{bucket}{Name of the S3 bucket for which you wish to create of connect
