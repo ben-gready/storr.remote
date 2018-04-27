@@ -2,6 +2,8 @@
 ##' @param bucket Name of the S3 bucket for which you wish to create or connect
 ##' store
 ##' @inheritParams storr::storr_rds
+##' @export
+##' @rdname storr_rds_s3
 storr_rds_s3 <- function(bucket, path, compress = NULL, mangle_key = NULL,
                          mangle_key_pad = NULL, hash_algorithm = NULL,
                          default_namespace = "objects") {
@@ -10,8 +12,6 @@ storr_rds_s3 <- function(bucket, path, compress = NULL, mangle_key = NULL,
                default_namespace)
 }
 
-##' @export
-##' @rdname storr_rds_s3
 driver_rds_s3 <- function(bucket, path, compress = NULL, mangle_key = NULL,
                           mangle_key_pad = NULL, hash_algorithm = NULL) {
 
