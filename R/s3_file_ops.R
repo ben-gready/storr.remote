@@ -86,5 +86,6 @@ R6_s3_file_ops <- R6::R6Class(
         invisible(aws.s3::delete_object(object = path, bucket = self$bucket))
       }
     }
+
   )
 )
