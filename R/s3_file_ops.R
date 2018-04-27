@@ -10,8 +10,6 @@ s3_file_ops <- function(bucket){
 R6_s3_file_ops <- R6::R6Class(
   "s3_file_ops",
   public = list(
-    ## TODO: things like hash_algorithm: do they belong in traits?
-    ## This needs sorting before anyone writes their own driver!
 
     bucket = NULL,
 
@@ -22,14 +20,14 @@ R6_s3_file_ops <- R6::R6Class(
     },
 
     write_serialized_rds = function(value, filename, compress) {
-      # write_serialized_rds(value, self$name_hash(hash), self$compress)
+
       aws.s3::s3write_using(x = value,
                             FUN = function(v, f) storr:::write_serialized_rds(value = v, filename = f, compress=compress),
                             object = filename,
                             bucket = self$bucket)
     },
 
-    readObject = function(path){
+    readObject = function(path) {
       aws.s3::s3readRDS(object = path, bucket = self$bucket)
     },
 
