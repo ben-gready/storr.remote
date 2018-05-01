@@ -47,8 +47,9 @@ system3 <- function(command, args = character(), check = FALSE) {
 test_ssh_connection <- function() {
   use_sshd_server()
   for (i in 1:10) {
-    con <- tryCatch(ssh::ssh_connect("root@127.0.0.1:10022", "keys/id_rsa"),
-                    error = function(e) NULL)
+    con <- tryCatch(
+      ssh::ssh_connect("root@127.0.0.1:10022", "sshd/keys/id_rsa"),
+      error = function(e) NULL)
     if (inherits(con, "ssh_session")) {
       return(con)
     }
