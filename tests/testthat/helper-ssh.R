@@ -14,8 +14,8 @@ start_sshd_server <- function() {
 }
 
 
-stop_sshd_server <- function() {
-  if (HAS_SSHD_SERVER) {
+stop_sshd_server <- function(force = FALSE) {
+  if (HAS_SSHD_SERVER || force) {
     system3("docker", c("stop", "storr-remote-sshd"))
     HAS_SSHD_SERVER <<- FALSE
   }
@@ -41,4 +41,19 @@ system3 <- function(command, args = character(), check = FALSE) {
     stop("Command failed: ", paste(ret$output, collapse = "\n"))
   }
   ret
+}
+
+
+test_ssh_connection <- function() {
+  use_sshd_server()
+  for (i in 1:10) {
+    con <- tryCatch(ssh::ssh_connect("root@127.0.0.1:10022", "keys/id_rsa"),
+                    error = function(e) NULL)
+    if (inherits(con, "ssh_session")) {
+      return(con)
+    }
+    ## server may not yet be up:
+    Sys.sleep(0.1)
+  }
+  testthat::skip("Failed to make connection")
 }
