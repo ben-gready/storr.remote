@@ -6,11 +6,22 @@ start_sshd_server <- function() {
   if (!identical(Sys.getenv("STORR_REMOTE_USE_SSHD"), "true")) {
     skip("Set 'STORR_REMOTE_USE_SSHD' to 'true' to enable sshd tests")
   }
+
+  ## Is there an existing server running still?
+  res <- system3("docker", c("inspect", "storr-remote-sshd"))
+  if (res$success) {
+    HAS_SSHD_SERVER <<- TRUE
+    return(TRUE)
+  }
+
+  ## Can we start a new one?
   res <- system3("sshd/server.sh", check = FALSE)
   if (res$success) {
     HAS_SSHD_SERVER <<- TRUE
+    return(TRUE)
   }
-  res$success
+
+  FALSE
 }
 
 
@@ -57,4 +68,9 @@ test_ssh_connection <- function() {
     Sys.sleep(0.1)
   }
   testthat::skip("Failed to make connection")
+}
+
+
+random_path <- function(prefix = "storr_remote", fileext = "") {
+  basename(tempfile(prefix, fileext = fileext))
 }
