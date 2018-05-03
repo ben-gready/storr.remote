@@ -1,5 +1,5 @@
-driver_remote <- function(ops, rds) {
-  R6_driver_remote$new(ops, rds)
+driver_remote <- function(ops, ..., path_local = NULL) {
+  R6_driver_remote$new(ops, ..., path_local = NULL)
 }
 
 R6_driver_remote <- R6::R6Class(
@@ -9,21 +9,26 @@ R6_driver_remote <- R6::R6Class(
     ops = NULL,
     rds = NULL,
     traits = NULL,
-    hash_algorithm = "md5",
+    hash_algorithm = NULL,
 
-    initialize = function(ops, rds) {
+    initialize = function(ops, ..., path_local) {
       ## For the configuration, we should pass along all dots to the
       ## remote storr and check?  Or do that when controlling the
       ## local rds.  So this is going to get a lot of dots and do the
       ## build itself.
       self$ops <- ops
-      self$rds <- rds
+
+      path_local <- path_local %||% tempfile()
+
+      config <- storr_remote_config_get(self$ops)
+      extra <- storr_remote_config_validate(config, path_local, ...)
+      storr_remote_config_set(self$ops, extra)
       self$ops$create_dir("data")
       self$ops$create_dir("keys")
+
+      self$rds <- storr::driver_rds(path_local, ...)
       self$traits <- self$rds$traits
-      ## TODO: deal with this when configuration is done:
-      self$traits$hash_algorithm <- FALSE
-      self$hash_algorithm <- "md5"
+      self$hash_algorithm <- self$rds$hash_algorithm
     },
 
     type = function() {
@@ -111,3 +116,71 @@ R6_driver_remote <- R6::R6Class(
         basename(dirname(p)),
         basename(p))
     }))
+
+
+## It would be really nice to do this as a single operation but that
+## probably can't be easily done generally.  Quite possibly it would
+## be possible to get/fetch an entire directory though.
+##
+## The other option is using a single remote object, which loses the
+## ability to have a remote storr really reflect a local one...
+storr_remote_config_get <- function(ops) {
+  ## NOTE: this is a storr/rds internal
+  path_config <- "config"
+  if (ops$exists(path_config, "directory")) {
+    keys <- ops$list_dir(path_config)
+    ret <- lapply(file.path(path_config, keys), ops$read_string)
+    names(ret) <- keys
+  } else {
+    ret <- NULL
+  }
+  ret
+}
+
+
+storr_remote_config_set <- function(ops, data) {
+  path_config <- "config"
+  for (key in names(data)) {
+    ops$write_string(data[[key]], file.path(path_config, key))
+  }
+}
+
+
+storr_remote_config_validate <- function(prev, path_local, ...) {
+  path_config <- "config"
+
+  ## This exploits quite a bit of storr's internals:
+  tmp <- tempfile()
+  on.exit(unlink(tmp, recursive = TRUE))
+  path_config_tmp <- file.path(tmp, path_config)
+
+  ## The storr rds driver requires that the config directory not exist
+  ## at all
+  if (!is.null(prev)) {
+    dir.create(path_config_tmp, FALSE, TRUE)
+    for (key in names(prev)) {
+      writeLines(prev[[key]], file.path(path_config_tmp, key))
+    }
+  }
+
+  ## This will error if the options can't be supported, but we never
+  ## use the driver itself for anything.
+  dr <- storr::driver_rds(tmp, ...)
+
+  ## These are the configuration elements to set remotely:
+  extra <- setdiff(dir(path_config_tmp), names(prev))
+  if (length(extra) > 0L) {
+    ret <- lapply(file.path(path_config_tmp, extra), readLines)
+    names(ret) <- extra
+  } else {
+    ret <- NULL
+  }
+
+  ## Replicate our temporary configuration into the local cache:
+  path_config_local <- file.path(path_local, path_config)
+  msg <- setdiff(dir(path_config_tmp), dir(path_config_local))
+  dir.create(path_config_local, FALSE, TRUE)
+  file.copy(file.path(path_config_tmp, msg), path_config_local)
+
+  ret
+}
