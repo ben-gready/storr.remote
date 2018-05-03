@@ -10,6 +10,9 @@ before_script:
   - docker pull sickp/alpine-sshd:latest
   - docker build tests/testthat/sshd
 
+env:
+  - STORR_REMOTE_USE_SSHD=true
+
 # Not 'addon' based because we're on sudo infrastructure
 apt_packages:
   - libssh-dev
