@@ -1,3 +1,10 @@
+##' ssh backend for storr
+##'
+##' @title ssh storr
+##'
+##' @param session A ssh session object (see \code{ssh::ssh_connect})
+##' @inheritParams storr_s3
+##' @export
 storr_ssh <- function(session, remote_root, ..., path_local = NULL,
                       default_namespace = "default_namespace") {
   dr <- driver_ssh(session, remote_root, ..., path_local = path_local)
@@ -5,6 +12,8 @@ storr_ssh <- function(session, remote_root, ..., path_local = NULL,
 }
 
 
+##' @export
+##' @rdname storr_ssh
 driver_ssh <- function(session, remote_root, ..., path_local = NULL) {
   ops <- ssh_file_ops(session, remote_root)
   storr::driver_remote(ops, ..., path_local = path_local)
