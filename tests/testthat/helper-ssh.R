@@ -4,6 +4,7 @@ HERE <- getwd()
 
 start_sshd_server <- function() {
   testthat::skip_on_cran()
+  testthat::skip_if_not_installed("ssh")
   if (!identical(Sys.getenv("STORR_REMOTE_USE_SSHD"), "true")) {
     skip("Set 'STORR_REMOTE_USE_SSHD' to 'true' to enable sshd tests")
   }
