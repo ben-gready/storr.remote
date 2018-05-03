@@ -1,0 +1,25 @@
+language: r
+cache: packages
+
+# Departure from usual setup because we need docker for testing
+sudo: true
+service: docker
+
+# Make tests more reliable by getting this up early
+before_script:
+  - docker pull sickp/alpine-sshd:latest
+  - docker build tests/testthat/sshd
+
+# Not 'addon' based because we're on sudo infrastructure
+apt_packages:
+  - libssh-dev
+
+# Could be done with Remotes: but I don't love that approach
+r_github_packages:
+  - ropensci/ssh
+
+# Test coverage
+r_packages:
+  - covr
+after_success:
+  - Rscript -e 'covr::codecov()'
