@@ -3,7 +3,6 @@ context("ssh_file_ops")
 test_that("directory operations", {
   ## Not strictly unit tests, but integration tests of basic
   ## operations.
-
   root <- random_path("storr_ssh_root_")
   path <- random_path()
 
