@@ -93,6 +93,10 @@ R6_ssh_file_ops <- R6::R6Class(
 
     ## TODO: not vectorised
     exists = function(path, type = c("any", "file", "directory")) {
+      if (length(path) != 1L) {
+        return(vapply(path, self$exists, logical(1), type,
+                      USE.NAMES = FALSE))
+      }
       flag <- c(file = "f", directory = "d", any = "e")[[match.arg(type)]]
       path_remote <- file.path(self$root, path)
       cmd <- sprintf("test -%s %s", flag, shQuote(path_remote))
@@ -113,11 +117,20 @@ R6_ssh_file_ops <- R6::R6Class(
     },
 
     delete_file = function(path) {
-      ## NOTE: This can't notify which were deleted
-      path_remote <- file.path(self$root, path)
-      res <- ssh::ssh_exec_internal(self$session,
-                                    sprintf("rm -f %s", shQuote(path_remote)),
-                                    error = FALSE)
+      ## NOTE: this should be farmed out to a set of scripts that we
+      ## move into the remote storr, then we can do this in one single
+      ## remote call.  A bash script can cake a path as args and
+      ## return a vector of 0/1?  Path length issues will be a problem
+      ## and we might need to use a temporary file?
+      exists <- self$exists(path)
+      for (p in path[exists]) {
+        path_remote <- file.path(self$root, path)
+        res <- ssh::ssh_exec_internal(
+          self$session,
+          sprintf("rm -f %s", shQuote(path_remote)),
+          error = FALSE)
+      }
+      exists
     },
 
     delete_directory = function(path) {
