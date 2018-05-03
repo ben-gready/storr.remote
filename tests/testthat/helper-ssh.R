@@ -44,7 +44,8 @@ use_sshd_server <- function() {
 
 system3 <- function(command, args = character(), check = FALSE) {
   res <- suppressWarnings(system2(command, args, stdout = TRUE, stderr = TRUE))
-  code <- attr(res, "status") %||% 0
+  status <- attr(res, "status")
+  code <- if (is.null(status)) 0 else status
   attr(res, "status") <- NULL
   ret <- list(success = code == 0,
               code = code,

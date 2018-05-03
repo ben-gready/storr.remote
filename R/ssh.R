@@ -1,3 +1,16 @@
+storr_ssh <- function(session, remote_root, ..., path_local = NULL,
+                      default_namespace = "default_namespace") {
+  dr <- driver_ssh(session, remote_root, ..., path_local = path_local)
+  storr::storr(dr, default_namespace)
+}
+
+
+driver_ssh <- function(session, remote_root, ..., path_local = NULL) {
+  ops <- ssh_file_ops(session, remote_root)
+  storr::driver_remote(ops, ..., path_local = path_local)
+}
+
+
 ssh_file_ops <- function(session, root) {
   R6_ssh_file_ops$new(session, root)
 }
@@ -109,7 +122,7 @@ R6_ssh_file_ops <- R6::R6Class(
         stop("Error downloading file: ", res$message)
       }
       if (is.null(dest)) {
-        read_binary(file_local)
+        readBin(file_local, raw(), file.size(file_local))
       } else {
         dir.create(dirname(dest), FALSE, TRUE)
         file.copy(file_local, dest)
