@@ -1,3 +1,5 @@
+##' S3 backend for storr
+##'
 ##' @title S3 backend for rds object cache driver
 ##'
 ##' @param bucket Name of the S3 bucket for which you wish to create

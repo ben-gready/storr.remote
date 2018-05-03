@@ -24,3 +24,6 @@ of connect store}
 
 \item{default_namespace}{Default namespace (see \code{storr::storr})}
 }
+\description{
+S3 backend for storr
+}
