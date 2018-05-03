@@ -12,15 +12,14 @@ test_that("directory operations", {
   path <- random_path()
   expect_false(ops$exists(path))
   ops$create_dir(path)
-  expect_false(ops$exists(path, "file"))
-  expect_true(ops$exists(path, "any"))
-  expect_true(ops$exists(path, "directory"))
+  expect_true(ops$exists(path))
+  expect_true(ops$exists_dir(path))
   expect_equal(ops$list_dir(path), character())
 
   ops$delete_file(path)
-  expect_true(ops$exists(path, "directory"))
+  expect_true(ops$exists_dir(path))
   ops$delete_dir(path)
-  expect_false(ops$exists(path, "directory"))
+  expect_false(ops$exists_dir(path))
 })
 
 

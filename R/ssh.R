@@ -56,16 +56,24 @@ R6_ssh_file_ops <- R6::R6Class(
       strsplit(rawToChar(res$stdout), "\n", fixed = TRUE)[[1L]]
     },
 
-    exists = function(path, type = c("any", "file", "directory")) {
+    exists_remote = function(path, is_directory) {
       if (length(path) != 1L) {
         ## TODO: vectorise via a remote script?
-        return(vapply(path, self$exists, logical(1), type,
+        return(vapply(path, self$exists_remote, logical(1), is_directory,
                       USE.NAMES = FALSE))
       }
-      flag <- c(file = "f", directory = "d", any = "e")[[match.arg(type)]]
+      flag <- if (is_directory) "d" else "e"
       path_remote <- file.path(self$root, path)
       cmd <- sprintf("test -%s %s", flag, shQuote(path_remote))
       ssh::ssh_exec_internal(self$session, cmd, error = FALSE)$status == 0L
+    },
+
+    exists = function(path) {
+      self$exists_remote(path, FALSE)
+    },
+
+    exists_dir = function(path) {
+      self$exists_remote(path, TRUE)
     },
 
     delete_file = function(path) {
