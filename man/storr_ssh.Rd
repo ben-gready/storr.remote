@@ -20,6 +20,8 @@ driver_ssh(session, remote_root, ..., path_local = NULL)
 
 \item{path_local}{Optional path to a local cache (see
 \code{storr::driver_remote})}
+
+\item{default_namespace}{Default namespace (see \code{storr::storr})}
 }
 \description{
 ssh backend for storr

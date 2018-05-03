@@ -5,7 +5,8 @@
 \alias{driver_s3}
 \title{S3 backend for rds object cache driver}
 \usage{
-storr_s3(bucket, remote_root, ..., path_local = NULL)
+storr_s3(bucket, remote_root, ..., path_local = NULL,
+  default_namesopace = "objects")
 
 driver_s3(bucket, remote_root, ..., path_local = NULL)
 }
@@ -20,4 +21,6 @@ of connect store}
 
 \item{path_local}{Optional path to a local cache (see
 \code{storr::driver_remote})}
+
+\item{default_namespace}{Default namespace (see \code{storr::storr})}
 }
