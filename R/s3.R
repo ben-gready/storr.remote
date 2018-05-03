@@ -137,9 +137,10 @@ R6_s3_file_ops <- R6::R6Class(
                          bucket = self$bucket)
     },
 
-    download_file = function(file, dest) {
+    download_file = function(file, dest_dir) {
       file_remote <- file.path(self$root, file)
-      aws.s3::save_object(file_remote, self$bucket, file = dest,
+      dest_file <- file.path(dest_dir, basename(file))
+      aws.s3::save_object(file_remote, self$bucket, file = dest_file,
                           overwrite = TRUE)
     },
 

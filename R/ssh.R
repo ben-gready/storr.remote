@@ -121,7 +121,7 @@ R6_ssh_file_ops <- R6::R6Class(
       invisible(file.path(dest_dir, basename(file)))
     },
 
-    download_file = function(file, dest) {
+    download_file = function(file, dest_dir) {
       file_remote <- file.path(self$root, file)
       tmp <- tempfile()
       dir.create(tmp)
@@ -138,12 +138,12 @@ R6_ssh_file_ops <- R6::R6Class(
       if (!file.exists(file_local)) {
         stop("Error downloading file: ", res$message)
       }
-      if (is.null(dest)) {
+      if (is.null(dest_dir)) {
         readBin(file_local, raw(), file.size(file_local))
       } else {
-        dir.create(dirname(dest), FALSE, TRUE)
-        file.copy(file_local, dest)
-        dest
+        dir.create(dest_dir, FALSE, TRUE)
+        file.copy(file_local, dest_dir, overwrite = TRUE)
+        file.path(dest_dir, basename(file))
       }
     },
 
