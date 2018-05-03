@@ -14,7 +14,7 @@
 ##' @param default_namespace Default namespace (see \code{storr::storr})
 ##' @export
 storr_s3 <- function(bucket, remote_root, ..., path_local = NULL,
-                     default_namesopace = "objects") {
+                     default_namespace = "objects") {
   dr <- driver_s3(bucket, remote_root, ..., path_local = path_local)
   storr::storr(dr, default_namespace)
 }

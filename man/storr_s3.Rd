@@ -6,7 +6,7 @@
 \title{S3 backend for rds object cache driver}
 \usage{
 storr_s3(bucket, remote_root, ..., path_local = NULL,
-  default_namesopace = "objects")
+  default_namespace = "objects")
 
 driver_s3(bucket, remote_root, ..., path_local = NULL)
 }
