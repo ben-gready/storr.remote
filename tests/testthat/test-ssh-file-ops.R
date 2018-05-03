@@ -20,7 +20,7 @@ test_that("directory operations", {
 
   ops$delete_file(path)
   expect_true(ops$exists(path, "directory"))
-  ops$delete_directory(path)
+  ops$delete_dir(path)
   expect_false(ops$exists(path, "directory"))
 })
 
@@ -41,8 +41,9 @@ test_that("single file, directoryless io", {
   expect_true(ops$exists(path))
   expect_equal(ops$read_bytes(path), bytes)
 
-  ops$delete_file(path)
+  expect_true(ops$delete_file(path))
   expect_false(ops$exists(path))
+  expect_false(ops$delete_file(path))
   expect_equal(ops$list_dir("."), character(0))
 })
 
@@ -66,8 +67,9 @@ test_that("directories are created automatically", {
   expect_true(ops$exists(path))
   expect_equal(ops$read_bytes(path), bytes)
 
-  ops$delete_file(path)
+  expect_true(ops$delete_file(path))
   expect_false(ops$exists(path))
+  expect_false(ops$delete_file(path))
   expect_equal(ops$list_dir("."), "a")
   expect_equal(ops$list_dir("a"), "b")
   expect_equal(ops$list_dir("a/b"), character(0))
