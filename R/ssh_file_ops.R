@@ -35,6 +35,10 @@ R6_ssh_file_ops <- R6::R6Class(
       self$root <- root
     },
 
+    type = function() {
+      "ssh"
+    },
+
     ## The two use cases that we can do easily are:
     ##
     ## upload arbitrary bytes to an arbitrary filename
