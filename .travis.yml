@@ -17,11 +17,6 @@ env:
 apt_packages:
   - libssh-dev
 
-# Could be done with Remotes: but I don't love that approach
-r_github_packages:
-  - ropensci/ssh
-  - richfitz/storr@i61_remote
-
 # Test coverage
 r_packages:
   - covr
