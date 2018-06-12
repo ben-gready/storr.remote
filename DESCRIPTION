@@ -6,10 +6,13 @@ Description: This package provides remote back ends to the wonderful storr
     key/val package. Right now AWS S3 is implemented, but we hope it will be 
     easy for others to contribute other backends.
 Depends: R (>= 3.1.0)
-License: What license is it under?
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports:
+    storr (>= 1.2.0)
 Suggests:
     aws.s3,
-    storr
+    ssh,
+    testthat
 RoxygenNote: 6.0.1
