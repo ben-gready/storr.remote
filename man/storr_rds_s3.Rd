@@ -28,7 +28,7 @@ when using \code{mangle_key} should also be "padded" with the
 is required to satisfy the document that describes base64
 encoding (RFC 4648) but can cause problems in some applications
 (see \href{{https://github.com/richfitz/storr/issues/43}{this
-issue}}. The default is to not pad \emph{new} storr archives.
+issue}}). The default is to not pad \emph{new} storr archives.
 This should be generally safe to leave alone.}
 
 \item{hash_algorithm}{Name of the hash algorithm to use.  Possible
