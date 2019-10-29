@@ -26,9 +26,8 @@ using base64 before saving to the filesystem.  See Details.}
 when using \code{mangle_key} should also be "padded" with the
 \code{=} character to make up a round number of bytes.  Padding
 is required to satisfy the document that describes base64
-encoding (RFC 4648) but can cause problems in some applications
-(see \href{{https://github.com/richfitz/storr/issues/43}{this
-issue}}). The default is to not pad \emph{new} storr archives.
+encoding (RFC 4648) but can cause problems in some applications. 
+The default is to not pad \emph{new} storr archives.
 This should be generally safe to leave alone.}
 
 \item{hash_algorithm}{Name of the hash algorithm to use.  Possible
