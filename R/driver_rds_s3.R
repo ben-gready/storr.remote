@@ -29,7 +29,6 @@ R6_driver_rds_s3 <- R6::R6Class(
     mangle_key_pad = NULL,
     hash_algorithm = NULL,
     traits = list(accept = "raw"),
-
     initialize = function(bucket, path, compress, mangle_key, mangle_key_pad,
                           hash_algorithm) {
 
